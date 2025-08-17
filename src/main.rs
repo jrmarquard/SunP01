@@ -1,6 +1,6 @@
-use actix_web::{get, App, HttpResponse, HttpServer, Responder};
+use actix_web::{App, HttpResponse, HttpServer, Responder};
 
-#[get("/")]
+#[actix_web::get("/")]
 async fn hello() -> impl Responder {
     println!("Received a request at /");
     HttpResponse::Ok().body("Hello, world!")
@@ -8,10 +8,12 @@ async fn hello() -> impl Responder {
 
 #[actix_web::main]
 async fn main() -> std::io::Result<()> {
+    let address = String::from("127.0.0.1:8080");
+    println!("Running server on http://{address}");
     HttpServer::new(|| {
         App::new().service(hello)
     })
-    .bind("127.0.0.1:8080")?
+    .bind(address)?
     .run()
     .await
 }
